@@ -1,0 +1,4 @@
+- agent=proto
+- task=jaco_reach_top_left
+- snapshot_ts=100000
+- obs_type=states

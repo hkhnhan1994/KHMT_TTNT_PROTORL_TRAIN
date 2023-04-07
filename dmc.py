@@ -265,6 +265,7 @@ class ExtendedTimeStepWrapper(dm_env.Environment):
 
 
 def _make_jaco(obs_type, domain, task, frame_stack, action_repeat, seed):
+    print('_make_jaco')
     env = cdmc.make_jaco(task, obs_type, seed)
     env = ActionDTypeWrapper(env, np.float32)
     env = ActionRepeatWrapper(env, action_repeat)
@@ -273,6 +274,7 @@ def _make_jaco(obs_type, domain, task, frame_stack, action_repeat, seed):
 
 
 def _make_dmc(obs_type, domain, task, frame_stack, action_repeat, seed):
+    print('_make_dmc')
     visualize_reward = False
     if (domain, task) in suite.ALL_TASKS:
         env = suite.load(domain,
@@ -300,8 +302,10 @@ def _make_dmc(obs_type, domain, task, frame_stack, action_repeat, seed):
 
 
 def make(name, obs_type, frame_stack, action_repeat, seed):
+    print(f'name: {name}')
     assert obs_type in ['states', 'pixels']
     domain, task = name.split('_', 1)
+    print(f'task: {domain}, domain: {task}')
     domain = dict(cup='ball_in_cup').get(domain, domain)
 
     make_fn = _make_jaco if domain == 'jaco' else _make_dmc

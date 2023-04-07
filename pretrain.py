@@ -3,6 +3,7 @@ import warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 import os
+import sys
 
 os.environ['MKL_SERVICE_FORCE_INTEL'] = '1'
 os.environ['MUJOCO_GL'] = 'egl'
@@ -38,7 +39,6 @@ class Workspace:
     def __init__(self, cfg):
         self.work_dir = Path.cwd()
         print(f'workspace: {self.work_dir}')
-
         self.cfg = cfg
         utils.set_seed_everywhere(cfg.seed)
         self.device = torch.device(cfg.device)
@@ -162,6 +162,8 @@ class Workspace:
         self.replay_storage.add(time_step, meta)
         self.train_video_recorder.init(time_step.observation)
         metrics = None
+        print(f'snapshot dir: {self.work_dir / Path(self.cfg.snapshot_dir)}')
+        (self.work_dir / Path(self.cfg.snapshot_dir)).mkdir(exist_ok=True, parents=True)
         while train_until_step(self.global_step):
             if time_step.last():
                 self._global_episode += 1
@@ -186,12 +188,9 @@ class Workspace:
                 meta = self.agent.init_meta()
                 self.replay_storage.add(time_step, meta)
                 self.train_video_recorder.init(time_step.observation)
-                # try to save snapshot
-                if self.global_frame in self.cfg.snapshots:
-                    self.save_snapshot()
+                
                 episode_step = 0
                 episode_reward = 0
-
             # try to evaluate
             if eval_every_step(self.global_step):
                 self.logger.log('eval_total_time', self.timer.total_time(),
@@ -210,9 +209,13 @@ class Workspace:
             if not seed_until_step(self.global_step):
                 metrics = self.agent.update(self.replay_iter, self.global_step)
                 self.logger.log_metrics(metrics, self.global_frame, ty='train')
-
+            # try to save snapshot
+            if self._global_step in self.cfg.snapshots:
+              print('Saving snapshot')
+              self.save_snapshot()
             # take env step
-            time_step = self.train_env.step(action)
+            time_step = self.train_env.step(action
+            )
             episode_reward += time_step.reward
             self.replay_storage.add(time_step, meta)
             self.train_video_recorder.record(time_step.observation)
@@ -220,13 +223,16 @@ class Workspace:
             self._global_step += 1
 
     def save_snapshot(self):
+
         snapshot_dir = self.work_dir / Path(self.cfg.snapshot_dir)
         snapshot_dir.mkdir(exist_ok=True, parents=True)
         snapshot = snapshot_dir / f'snapshot_{self.global_frame}.pt'
+        print(f'snapshot dir : {snapshot}')
         keys_to_save = ['agent', '_global_step', '_global_episode']
         payload = {k: self.__dict__[k] for k in keys_to_save}
         with snapshot.open('wb') as f:
             torch.save(payload, f)
+        print(f'snapshot dir : {snapshot}')
 
 
 @hydra.main(config_path='.', config_name='pretrain')

@@ -1,0 +1,12 @@
+[2023-04-07 11:26:31,360][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.305902
+[2023-04-07 11:51:27,068][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.45328
+[2023-04-07 11:59:58,037][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.305902
+[2023-04-07 12:23:52,560][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.294252
+[2023-04-07 12:50:54,637][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.254619
+[2023-04-07 12:52:43,313][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.300429
+[2023-04-07 12:59:24,749][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.323468
+[2023-04-07 13:01:47,033][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.312915
+[2023-04-07 13:04:47,226][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.317884
+[2023-04-07 13:05:35,033][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.245106
+[2023-04-07 13:36:22,638][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.45328
+[2023-04-07 14:15:18,909][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.385127

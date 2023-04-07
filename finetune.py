@@ -60,6 +60,7 @@ class Workspace:
 
         # initialize from pretrained
         if cfg.snapshot_ts > 0:
+            print("load_snapshot")
             pretrained_agent = self.load_snapshot()['agent']
             self.agent.init_from(pretrained_agent)
 
@@ -220,14 +221,20 @@ class Workspace:
 
     def load_snapshot(self):
         snapshot_base_dir = Path(self.cfg.snapshot_base_dir)
+        # print(f'snapshot dir: {snapshot_base_dir}')
         domain, _ = self.cfg.task.split('_', 1)
-        snapshot_dir = snapshot_base_dir / self.cfg.obs_type / domain / self.cfg.agent.name
-
+        # print(domain)
+        snapshot_dir =Path.cwd() / snapshot_base_dir / self.cfg.obs_type / domain / self.cfg.agent.name
+        print(f'I am at:{Path.cwd()} ')
+        print(snapshot_dir)
         def try_load(seed):
             snapshot = snapshot_dir / str(
                 seed) / f'snapshot_{self.cfg.snapshot_ts}.pt'
+            print(f'try load snapshot: {snapshot}')
             if not snapshot.exists():
+                # print('not exists')
                 return None
+            print('found snapshot')
             with snapshot.open('rb') as f:
                 payload = torch.load(f)
             return payload

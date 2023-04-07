@@ -1,0 +1,3 @@
+[2023-04-07 15:57:43,055][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.305902
+[2023-04-07 16:21:32,408][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.45328
+[2023-04-07 16:29:41,743][absl][WARNING] - Failed to converge after 99 steps: err_norm=0.305902
